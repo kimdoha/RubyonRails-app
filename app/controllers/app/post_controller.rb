@@ -30,9 +30,8 @@ module App
                 AND title REGEXP keyword
                 AND postId = #{post.postId}")
 
-                Rails.logger.debug "KeywordInfo: #{keywordInfo}"
-                
-                Rails.logger.debug "TrueOrFalse: #{keywordInfo.present?}"
+                # Rails.logger.debug "KeywordInfo: #{keywordInfo[0].keywordId}"
+                # Rails.logger.debug "TrueOrFalse: #{keywordInfo.present?}"
                 
                 # 내 키워드가 있을 경우
                 if keywordInfo.present?
@@ -40,19 +39,23 @@ module App
                     # post.postId, keywordInfo.keywordId 를 Alarm 모델에 저장
                     alarm = Alarm.new()
                     alarm.postId = post.postId
-                    alarm.keywordId = keywordInfo.keywordId
+                    alarm.keywordId = keywordInfo[0].keywordId
 
-                    if alarm.save!
+                    
+                    if !alarm.save
                         render json: { 
                             isSuccess:false, 
                             code:3002, 
                             message:"알림 생성 실패", 
                             result: alarm.errors }, status: :unprocessable_entity
                     end
+
+                    Rails.logger.debug "AlarmInfo1: #{alarm.keywordId}"
+                    Rails.logger.debug "AlarmInfo2: #{alarm.postId}"
                         
                 end
 
-                
+
                 render json: { 
                     isSuccess:true, 
                     code:1000, 
@@ -67,7 +70,9 @@ module App
                     message:"게시글 작성 실패", 
                     result: post.errors }, status: :unprocessable_entity
             end
+
         end
+    
 
 
         private
