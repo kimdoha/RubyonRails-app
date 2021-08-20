@@ -3,4 +3,5 @@ class Post < ApplicationRecord
     # has_many :alarms
     validates :title, presence: true
     validates :content, presence: true
+    validates :imageUrl, presence: true
 end

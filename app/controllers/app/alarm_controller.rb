@@ -7,8 +7,7 @@ module App
             alarms = Alarm.select('
             alarms.alarmId, 
             CONCAT("[", keywords.keyword, " 키워드 알림] ", title) AS title, 
-            content, 
-            alarms.keywordId,
+            imageUrl,
             (CASE
                 WHEN TIMESTAMPDIFF(SECOND, posts.createAt, now()) <= 0 THEN "방금 전"
                 WHEN TIMESTAMPDIFF(SECOND, posts.createAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, posts.createAt, NOW()), "초 전")
@@ -28,6 +27,8 @@ module App
                 message:"키워드 알림 게시글 전체조회", 
                 result: alarms }, status: :ok
         end
+
+
 
     end
 end
