@@ -2,7 +2,7 @@ module App
     class KeywordController < ApplicationController
 
         # @Get http://localhost:3000/app/keyword
-        # 키워드 전체 조회
+        # 키워드 전체 조회 API
         def index
             keywords = Keyword.select("keywordId, userId, keyword").order('createAt DESC')
             render json: { 
@@ -13,9 +13,9 @@ module App
 
         end
 
-        
+
         # @Post http://localhost:3000/app/keyword
-        # 키워드 생성
+        # 키워드 등록 API
         def create
             keyword = Keyword.new(keyword_params)
 
@@ -37,7 +37,7 @@ module App
 
 
         # @DELETE http://localhost:3000/app/keyword
-        # 키워드 삭제
+        # 키워드 삭제 API
         def destroy
             keyword = Keyword.find(params[:id])
             keyword.destroy
