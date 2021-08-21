@@ -3,6 +3,7 @@ module App
 
         # @Get http://localhost:3000/app/alarm
         # 키워드 알림 게시글 전체 조회 API
+        
         def index
             alarms = Alarm.select('
             alarms.alarmId, 
