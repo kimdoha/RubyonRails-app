@@ -4,7 +4,12 @@ module App
         # @Get http://localhost:3000/app/keyword
         # 키워드 전체 조회 API
         def index
-            keywords = Keyword.select("keywordId, userId, keyword").order('createAt DESC')
+            keywords = Keyword.select("keywordId, userId, keyword")
+            .where('keywords.userId = 1')
+            .order('createAt DESC')
+
+            
+
             render json: { 
                 isSuccess:true, 
                 code:1000, 
@@ -39,13 +44,23 @@ module App
         # @DELETE http://localhost:3000/app/keyword
         # 키워드 삭제 API
         def destroy
-            keyword = Keyword.find(params[:id])
+            
+            keyword = Keyword.find(params[:id]) 
             keyword.destroy
+
             render json: { 
                 isSuccess:true, 
                 code:1000, 
                 message:"키워드 삭제 완료", 
                 result: keyword }, status: :ok
+
+            rescue => e
+                render json: { 
+                    isSuccess:false, 
+                    code:3003, 
+                    message: "해당 id의 키워드가 삭제되었거나 존재하지 않습니다", 
+                }
+
         end
 
 

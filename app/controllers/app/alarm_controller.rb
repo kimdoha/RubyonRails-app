@@ -3,7 +3,7 @@ module App
 
         # @Get http://localhost:3000/app/alarm
         # 키워드 알림 게시글 전체 조회 API
-        
+
         def index
             alarms = Alarm.select('
             alarms.alarmId, 
@@ -20,13 +20,25 @@ module App
         END) AS time')
             .joins('INNER JOIN posts ON alarms.postId = posts.postId')
             .joins('INNER JOIN keywords ON alarms.keywordId = keywords.keywordId')
+            .where('alarms.userId = 1')
             .order('alarms.createAt DESC')
 
-            render json: { 
-                isSuccess:true, 
-                code:1000, 
-                message:"키워드 알림 게시글 전체조회", 
-                result: alarms }, status: :ok
+            # 키워드 알림 게시글이 조회될 때
+            if alarms.present?
+                render json: { 
+                    isSuccess:true, 
+                    code:1000, 
+                    message:"키워드 알림 게시글 전체조회", 
+                    result: alarms }, status: :ok
+
+            # 키워드 알림 게시글이 조회되지 않을 때
+            else
+                render json: { 
+                    isSuccess:false, 
+                    code:3004, 
+                    message:"키워드 알림이 없어요./n키워드를 등록하고 알림을 받아보세요.", 
+                }
+            end
         end
 
 

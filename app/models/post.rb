@@ -3,7 +3,7 @@ class Post < ApplicationRecord
     # has_many :alarms
     validates :title, 
     presence: true, 
-    length: { in: 2..20 }     # 글자 수 : 2 ~ 20
+    length: { in: 2..30 }     # 글자 수 : 2 ~ 30
 
     validates :content, 
     presence: true, 
