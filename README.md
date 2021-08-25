@@ -1,28 +1,10 @@
 # README
 
-```
-서버 실행 : rails server or rails s
-```
+### [가이드 문서]는 notion 페이지에 정리해두었습니다.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+: https://pond-eyebrow-51e.notion.site/309a060375f34b8bb361da94f77e2370
 
-Things you may want to cover:
+### [API 명세서]
+: https://docs.google.com/spreadsheets/d/1QTBC7T0AfEJkx0-_SnA461jd4SOt-5LhEIngQIMX99U/edit?usp=sharing
 
-* Ruby version
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...

@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-    validates :nickName, 
+    validates :nick_name, 
     presence: true
 
     validates :alarm, 

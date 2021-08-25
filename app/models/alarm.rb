@@ -1,11 +1,13 @@
 class Alarm < ApplicationRecord
-    # has_many :posts
-    # belongs_to :posts
-    validates :postId, 
+    belongs_to :post
+    belongs_to :keyword
+
+
+    validates :post_id, 
     presence: true
     
 
-    validates :keywordId, 
+    validates :keyword_id, 
     presence: true
 
 end

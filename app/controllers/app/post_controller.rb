@@ -22,6 +22,7 @@ module App
 
         def create
             ActiveRecord::Base.connection_pool.with_connection do
+
                 post = Post.new(post_params)
 
                 if post.save
@@ -31,7 +32,7 @@ module App
                     # OFF : 키워드 알림 생략
                     mySetting = User.select("alarm")
                     .where("status = 'Y'
-                    AND userId = 1")
+                    AND id = 1")
     
     
                     
@@ -39,12 +40,12 @@ module App
                     if mySetting[0].alarm == 1
                     
                         # 게시글 생성 시 => 해당 게시글에 [내 키워드] 가 있는지 확인
-                        keywordInfo = Post.select("keywordId")
+                        keywordInfo = Post.select("keywords.id")
                         .joins("CROSS JOIN keywords")
                         .where("status = 'Y'
                         AND title REGEXP keyword
-                        AND keywords.userId = 1
-                        AND postId = #{post.postId}")
+                        AND keywords.user_id = 1
+                        AND posts.id = #{post.id}")
     
     
                         # 게시글에 [내 키워드] 가 있을 경우, [키워드 알림] 화면에 게시글 알림
@@ -52,8 +53,8 @@ module App
     
                             # post.postId, keywordInfo[0].keywordId 를 Alarm 모델에 저장
                             alarm = Alarm.new()
-                            alarm.postId = post.postId 
-                            alarm.keywordId = keywordInfo[0].keywordId
+                            alarm.post_id = post.id
+                            alarm.keyword_id = keywordInfo[0].id
     
                             
                             if !alarm.save
@@ -65,15 +66,14 @@ module App
                             end
     
     
-                            pushAlarms = Alarm.select('
-                            alarms.alarmId, 
-                            CONCAT("[", keywords.keyword, " 키워드 알림] ") AS title, 
-                            posts.title AS content,
-                            imageUrl')
-                            .joins('INNER JOIN posts ON alarms.postId = posts.postId')
-                            .joins('INNER JOIN keywords ON alarms.keywordId = keywords.keywordId')
-                            .where('alarms.userId = 1')
-                            .order('alarms.createAt DESC')
+                            pushAlarms = Post.select('
+                            CONCAT("[", keyword, " 키워드 알림] ") AS title, 
+                            title AS content,
+                            image_url')
+                            .joins(:alarms)
+                            .joins(:keywords)
+                            .where('alarms.user_id = 1')
+                            .order('alarms.create_at DESC')
                             .limit(1)
         
         
@@ -85,7 +85,7 @@ module App
                                         notification: { body: pushAlarms[0].content,       # 푸시알림 본문
                                                         title: pushAlarms[0].title,        # 푸시알림 제목
                                                         sound: 'default',                  # 푸시알림 소리
-                                                        icon: pushAlarms[0].imageUrl       # 푸시알림 시 이미지
+                                                        icon: pushAlarms[0].image_url       # 푸시알림 시 이미지
                                                     }
                                     }
                             
@@ -120,7 +120,7 @@ module App
            
         private
         def post_params
-            params.permit(:title, :content, :imageUrl)
+            params.permit(:title, :content, :image_url)
         end
 
 

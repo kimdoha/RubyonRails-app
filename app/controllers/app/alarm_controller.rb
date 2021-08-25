@@ -5,23 +5,24 @@ module App
         # 키워드 알림 게시글 전체 조회 API
 
         def index
-            alarms = Alarm.select('
-            alarms.alarmId, 
-            CONCAT("[", keywords.keyword, " 키워드 알림] ", title) AS title, 
-            imageUrl,
-            (CASE
-                WHEN TIMESTAMPDIFF(SECOND, posts.createAt, now()) <= 0 THEN "방금 전"
-                WHEN TIMESTAMPDIFF(SECOND, posts.createAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, posts.createAt, NOW()), "초 전")
-                WHEN TIMESTAMPDIFF(MINUTE, posts.createAt, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, posts.createAt, NOW()), "분 전")
-                WHEN TIMESTAMPDIFF(HOUR, posts.createAt, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, posts.createAt, NOW()), "시간 전")
-                WHEN TIMESTAMPDIFF(DAY, posts.createAt, NOW()) < 31 THEN CONCAT(TIMESTAMPDIFF(DAY, posts.createAt, NOW()), "일 전")
-                WHEN TIMESTAMPDIFF(MONTH, posts.createAt, NOW()) < 12 THEN CONCAT(TIMESTAMPDIFF(MONTH, posts.createAt, NOW()), "달 전")
-                ELSE CONCAT(TIMESTAMPDIFF(YEAR, posts.createAt, NOW()), "년 전")
+
+        alarms = Post.select('
+        alarms.id, 
+        CONCAT("[", keyword, " 키워드 알림] ", title) AS title, 
+        image_url,
+        (CASE
+            WHEN TIMESTAMPDIFF(SECOND, posts.create_at, now()) <= 0 THEN "방금 전"
+            WHEN TIMESTAMPDIFF(SECOND, posts.create_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, posts.create_at, NOW()), "초 전")
+            WHEN TIMESTAMPDIFF(MINUTE, posts.create_at, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, posts.create_at, NOW()), "분 전")
+            WHEN TIMESTAMPDIFF(HOUR, posts.create_at, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, posts.create_at, NOW()), "시간 전")
+            WHEN TIMESTAMPDIFF(DAY, posts.create_at, NOW()) < 31 THEN CONCAT(TIMESTAMPDIFF(DAY, posts.create_at, NOW()), "일 전")
+            WHEN TIMESTAMPDIFF(MONTH, posts.create_at, NOW()) < 12 THEN CONCAT(TIMESTAMPDIFF(MONTH, posts.create_at, NOW()), "달 전")
+            ELSE CONCAT(TIMESTAMPDIFF(YEAR, posts.create_at, NOW()), "년 전")
         END) AS time')
-            .joins('INNER JOIN posts ON alarms.postId = posts.postId')
-            .joins('INNER JOIN keywords ON alarms.keywordId = keywords.keywordId')
-            .where('alarms.userId = 1')
-            .order('alarms.createAt DESC')
+        .joins(:alarms)
+        .joins(:keywords)
+        .where('alarms.user_id = 1')
+        .order('alarms.create_at DESC')
 
             # 키워드 알림 게시글이 조회될 때
             if alarms.present?

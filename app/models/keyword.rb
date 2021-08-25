@@ -1,4 +1,8 @@
 class Keyword < ApplicationRecord
+    has_many :alarms
+    has_many :posts, through: :alarms
+  
+
     validates :keyword, 
     presence: true, 
     format: { with: /([가-힣\x20])/,

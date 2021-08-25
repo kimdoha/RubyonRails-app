@@ -4,9 +4,9 @@ module App
         # @Get http://localhost:3000/app/keyword
         # 키워드 전체 조회 API
         def index
-            keywords = Keyword.select("keywordId, userId, keyword")
-            .where('keywords.userId = 1')
-            .order('createAt DESC')
+            keywords = Keyword.select("id, user_id, keyword")
+            .where('user_id = 1')
+            .order('create_at DESC')
 
             
 
