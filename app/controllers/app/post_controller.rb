@@ -47,7 +47,7 @@ module App
                     # 게시글에 [내 키워드] 가 있을 경우, [키워드 알림] 화면에 게시글 알림
                     if keywordInfo.present?
 
-                        # post.postId, keywordInfo.keywordId 를 Alarm 모델에 저장
+                        # post.postId, keywordInfo[0].keywordId 를 Alarm 모델에 저장
                         alarm = Alarm.new()
                         alarm.postId = post.postId 
                         alarm.keywordId = keywordInfo[0].keywordId
@@ -85,7 +85,7 @@ module App
     
                         # FCM 푸시 알림 서비스 연동
                         require 'fcm'
-                        fcm_client = FCM.new('') # set your FCM_SERVER_KEY
+                        fcm_client = FCM.new(FCM_SERVER_KEY) # set your FCM_SERVER_KEY
 
                         options = { priority: 'high',
                                     notification: { body: pushAlarms[0].content,       # 푸시알림 본문
@@ -97,7 +97,7 @@ module App
                         
     
                         # 휴대폰 기기 토큰 값
-                        registration_id = ""
+                        registration_id = REGISTRATION_TOKEN
                     
     
                         response = fcm_client.send(registration_id, options)
