@@ -13,6 +13,8 @@ gem 'fcm'
 
 gem 'sucker_punch', '~> 3.0'
 
+gem "figaro"
+
 # Use Puma as the app server
 gem 'puma', '~> 5.0'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
