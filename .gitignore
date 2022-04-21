@@ -33,3 +33,15 @@
 
 # Ignore application configuration
 /config/application.yml
+/config/credentials.yml.enc
+/config/database.yml
+
+# gitignore 추가
+Gemfile.lock
+Rakefile
+vender/*
+tmp/*
+storage/*
+log/*
+lib/*
+.bundle/*
